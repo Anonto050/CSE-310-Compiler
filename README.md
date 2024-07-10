@@ -2,517 +2,488 @@
 
 # CSE 310 `Compiler`
 
-## Introduction
+This repository contains the implementation of assignments from the Compiler Sessional course, offered in the Department of Computer Science and Engineering at Bangladesh University of Engineering and Technology (BUET). The course focuses on developing a C compiler that performs lexical, syntax, and semantic analysis, and generates intermediate code.
 
-This repository contains the implementation of assignments from the Compiler Sessional course, offered in the Department of Computer Science and Engineering at Bangladesh University of Engineering and Technology (BUET). The course focuses on developing a C compiler that performs lexical, syntax, and semantic analysis, and generates intermediate code. It covers most of the basic features of the language, though it is not a complete C compiler. For more details, see [here](#syntax-analyser).
+
+---
 
 ## Table of Contents
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+- [Assignments](#assignments)
+  - [Offline 1: Symbol Table](#offline-1-symbol-table)
+  - [Offline 2: Lexical Analysis (FLEX)](#offline-2-lexical-analysis-flex)
+  - [Offline 3: Syntax & Semantic Analysis (YACC/BISON)](#offline-3-syntax--semantic-analysis-yaccbison)
+  - [Offline 4: Intermediate Code Generation](#offline-4-intermediate-code-generation)
+- [Making it Easier: C Compiler](#making-it-easier-c-compiler)
+  - [Part 1: Symbol Table](#part-1-symbol-table)
+  - [Part 2: Lexical Analysis](#part-2-lexical-analysis)
+  - [Part 3: Syntax and Semantic Analysis](#part-3-syntax-and-semantic-analysis)
+  - [Part 4: Error Recovery](#part-4-error-recovery)
+  - [Part 5: Intermediate Code Generation](#part-5-intermediate-code-generation)
+- [Disclaimer](#disclaimer)
+- [Contributing](#contributing)
+- [License](#license)
 
-<div>
-<ul>
-        <li><a href="#lexical-analyser">Lexical Analyser</a></li>
-        <li><a href="#syntax-analyser">Syntax Analyser</a></li>
-        <li><a href="#semantic-analyser">Semantic Analyser</a></li>
-        <li><a href="#intermediate-code-generation">Intermediate Code Generation</a>
-        <ul>
-        <li><a href="#the-algorithm">The Algorithm</a></li>
-        <li><a href="#evaluating-for-loop-is-somewhat-tricky">Evaluating for loop is somewhat tricky</a></li>
-        <li><a href="#evaluating-functions">Evaluating functions</a></li>
-        <li><a href="#declaring-variables">Declaring variables</a></li>
-        <li><a href="#accessing-variables">Accessing variables</a></li>
-        <li><a href="#conclusion">Conclusion</a></li>
-        <li><a href="#optimizing-assembly-code">Optimizing assembly code</a></li>
-        </ul>
-        </li>
-</ul>
-</div>
+## Introduction
 
-## Lexical Analyser
+This repository contains the implementation of various assignments for the CSE-310 Compiler Sessional course. The primary objective is to develop a C compiler that performs comprehensive lexical, syntax, and semantic analysis and generates intermediate code for the 8086 assembly language.
 
-### Lexer returns the following tokens to the parser:
+## Getting Started
 
-- Keywords
+To get started with this repository:
 
-        Matched lexeme  :       Returned Token
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/Anonto050/CSE-310-Compiler.git
+    ```
 
-        if              :       IF
-        else            :       ELSE
-        for             :       FOR
-        while           :       WHILE
-        do              :       DO
-        break           :       BREAK
-        int             :       INT
-        char            :       CHAR
-        float           :       FLOAT
-        double          :       DOUBLE
-        void            :       VOID
-        return          :       RETURN
-        switch          :       SWITCH
-        case            :       CASE
-        default         :       DEFAULT
-        continue        :       CONTINUE
+2. **Navigate to the project directory**:
+    ```bash
+    cd CSE-310-Compiler
+    ```
 
-- Constants
+3. **Build the project**:
+    ```bash
+    make
+    ```
 
-        Returned Tokens
+4. **Run the compiler** on a C file:
+    ```bash
+    ./compiler program_name.c
+    ```
 
-        CONST_INT
-        CONST_FLOAT
-        CONST_CHAR
+## Assignments
 
-- Operators and punctuators
+### Offline 1: Symbol Table
 
-        Matched Lexeme          :       Returned Token
+**Symbol Table**
+- [Problem Specification](Offline/Offline%201/Assignment1_Specification.pdf)
+- [Solution](Offline/Offline%201/1705010)
 
-        +, -                    :       ADDOP           *
-        *, /, %                 :       MULOP           *
-        ++, --                  :       INCOP           *
-        <, <=, >, >=, ==, !=    :       RELOP           *
-        =                       :       ASSIGNOP
-        &&, ||                  :       LOGICOP         *
-        !                       :       NOT
-        (                       :       LPAREN
-        )                       :       RPAREN
-        {                       :       LCURL
-        }                       :       RCURL
-        [                       :       LTHIRD
-        ]                       :       RTHIRD
-        ,                       :       COMMA
-        ;                       :       SEMICOLON
+### Offline 2: Lexical Analysis (FLEX)
 
-- Identifiers
+**Lexical Analysis**
+- [Problem Specification](Offline/Offline%202/Assignment%202%20Specification.pdf)
+- [Solution](Offline/Offline%202/1705010)
 
-        ID                                              *
+### Offline 3: Syntax & Semantic Analysis (YACC/BISON)
 
-- Strings
+**Syntax & Semantic Analysis**
+- [Problem Specification](Offline/Offline%203/CSE310_January_2021_YACC_Assignment_Spec.pdf)
+- [Solution](Offline/Offline%203/1705010)
 
-        STRING
+### Offline 4: Intermediate Code Generation
 
-- **Whitespaces and comments are identified by the lexer but these are not passed to the parser.**
-- **Lexer also counts the line numbers when it finds a newline.**
+**Intermediate Code Generation**
+- [Problem Specification](Offline/Offline%204/CSE_310_January_2021_ICG_Spec.pdf)
+- [Solution](Offline/Offline%204/1705010)
 
-**Tokens with \* are passed as SymbolInfo objects to the parser. The SymbolInfo contains <matched lexeme, returned token> of the lexeme**
+## Making it Easier: C Compiler
+
+This project involves the explanation of development of the C compiler that performs lexical, syntax, and semantic analysis, and generates intermediate code. The compiler covers a subset of the C language and uses Flex (lexer) and Bison (YACC parser) for analysis.
+
+### Part 1: Symbol Table
+
+#### Overview
+
+A Symbol Table is a data structure maintained by compilers to store information about the occurrence of various entities such as identifiers, objects, function names, etc. It helps in organizing the program's symbols and facilitates efficient lookup, insertion, and deletion operations.
+
+#### Implementation
+
+The Symbol Table is implemented using Scope Tables. Each Scope Table contains information about symbols within a specific scope. Here are the key components:
+
+- **SymbolInfo**: Stores information about a symbol, such as its type, value, and scope.
+- **ScopeTable**: Maintains a hash table for symbols within a scope, allowing for quick lookup and management of symbols.
+- **SymbolTable**: Manages multiple scopes, allowing for entering and exiting scopes, which is essential for handling nested scopes in a program.
+
+#### Example
+
+```cpp
+class SymbolInfo {
+public:
+    string name;
+    string type;
+    // Additional attributes can be added as needed
+    SymbolInfo(string name, string type) : name(name), type(type) {}
+};
+
+class ScopeTable {
+private:
+    unordered_map<string, SymbolInfo*> table;
+    int id;
+    ScopeTable* parentScope;
+public:
+    ScopeTable(int id, ScopeTable* parent) : id(id), parentScope(parent) {}
+    bool insert(SymbolInfo* symbol) {
+        if (table.find(symbol->name) == table.end()) {
+            table[symbol->name] = symbol;
+            return true;
+        }
+        return false;
+    }
+    SymbolInfo* lookup(string name) {
+        if (table.find(name) != table.end()) {
+            return table[name];
+        }
+        if (parentScope != nullptr) {
+            return parentScope->lookup(name);
+        }
+        return nullptr;
+    }
+    // Other methods for deletion, printing, etc.
+};
+
+class SymbolTable {
+private:
+    ScopeTable* currentScope;
+    int currentScopeId;
+public:
+    SymbolTable() : currentScopeId(1) {
+        currentScope = new ScopeTable(currentScopeId, nullptr);
+    }
+    void enterScope() {
+        currentScopeId++;
+        currentScope = new ScopeTable(currentScopeId, currentScope);
+    }
+    void exitScope() {
+        if (currentScope->getParentScope() != nullptr) {
+            ScopeTable* temp = currentScope;
+            currentScope = currentScope->getParentScope();
+            delete temp;
+        }
+    }
+    bool insert(SymbolInfo* symbol) {
+        return currentScope->insert(symbol);
+    }
+    SymbolInfo* lookup(string name) {
+        return currentScope->lookup(name);
+    }
+    // Other methods for managing scopes and symbols
+};
+```
+<p align="right"><a href="#top">back to top</a></p>
+
+### Part 2: Lexical Analysis
+
+#### Overview
+
+Lexical analysis is the process of converting a sequence of characters into a sequence of tokens. This step is performed by the lexical analyzer (lexer), which identifies meaningful lexemes and classifies them into token types. In this project, we use `flex` to define the lexer.
+
+#### Flex File Structure
+
+A flex file consists of three sections:
+1. **Definitions**: Define macros and include headers.
+2. **Rules**: Specify regular expressions and the corresponding actions.
+3. **User Code**: Additional C/C++ code used by the lexer.
+
+#### Example Flex File
+
+```c
+%{
+#include "y.tab.h"
+%}
+
+WHITESPACE [ \t\f\r\v]+ 
+LETTER [a-zA-Z_]
+DIGIT [0-9]
+NEWLINE [\r]?\n
+ALNUM [A-Za-z_0-9]
+ALL_EXCEPT_BACKSLASH [^\\]
+
+%%
+
+{LETTER}{ALNUM}* {
+    yylval.symbol_info = new SymbolInfo(yytext, "ID");
+    return ID;
+}
+
+"+"|"-" {
+    yylval.symbol_info = new SymbolInfo(yytext, "ADDOP");
+    return ADDOP;
+}
+
+. { 
+    // Handle other tokens
+}
+
+%%
+```
+
+In the example above, the lexer identifies identifiers and addition operators and returns the corresponding tokens to the parser.
+
+- **Additional Notes**
+
+  - Whitespaces and comments are identified but not passed to the parser.
+  - The lexer counts line numbers for newline characters.
+
+**Tokens with \* are passed as `SymbolInfo` objects to the parser, containing the matched lexeme and returned token.**
 
 ### Lexical Errors:
 
-Detect lexical errors in the source program and report them along with the corresponding line number. Detects the following types of errors:
+The lexer detects and reports errors with corresponding line numbers. Types of errors include:
 
-- Too many decimal point errors for character sequences like `1.2.345`
-- Ill-formed numbers such as `1E10.7`
-- Invalid Suffix on numeric constant or invalid prefix on identifier for character sequences like `12abcd`
-- Multi-character constant error for character sequences like `‘ab’`
-- Unfinished characters such as `‘a`, `‘\n`, or `‘\’`
-- Empty character constant errors `''`
-- Unfinished strings like `"this is an unfinished string`
-- Unfinished comments like `/* This is an unfinished comment`
-- Unrecognized characters (Any character that does not match any defined regular expressions)
-- **Also counts the total number of errors.**
+- Excessive decimal points, e.g., `1.2.345`
+- Malformed numbers, e.g., `1E10.7`
+- Invalid suffix on numeric constants or prefix on identifiers, e.g., `12abcd`
+- Multi-character constants, e.g., `‘ab’`
+- Unfinished characters, e.g., `‘a`, `‘\n`, or `‘\’`
+- Empty character constants, e.g., `''`
+- Unfinished strings, e.g., `"this is an unfinished string`
+- Unfinished comments, e.g., `/* This is an unfinished comment`
+- Unrecognized characters
 
 <p align="right"><a href="#top">back to top</a></p>
+
+### Part 3: Syntax and Semantic Analysis
+
+#### Overview
+
+The parser takes the sequence of tokens produced by the lexer and verifies that the sequence conforms to the grammar of the source language. This step is known as syntax analysis. Semantic analysis ensures that the program's constructs are semantically correct.
+
+#### Bison File Structure
+
+A Bison file consists of three sections:
+1. **Definitions**: Define tokens, data types, and precedence rules.
+2. **Rules**: Specify the grammar rules and corresponding actions.
+3. **User Code**: Additional C/C++ code used by the parser.
+
+#### Example Bison File
+
+```bison
+%{
+#include "symbol_table.h"
+void yyerror(const char* s);
+%}
+
+%union {
+    SymbolInfo* symbol_info;
+    // Other types
+}
+
+%token <symbol_info> ID ADDOP
+
+%type <symbol_info> expression term factor
+
+%%
+
+start : program
+      ;
+
+program : program unit
+        | unit
+        ;
+
+unit : var_declaration
+     | func_declaration
+     | func_definition
+     ;
+
+var_declaration : type_specifier declaration_list ';'
+                ;
+
+type_specifier : INT
+               | FLOAT
+               | VOID
+               ;
+
+declaration_list : declaration_list ',' ID
+                 | ID
+                 ;
+
+%%
+
+int main() {
+    yyparse();
+    return 0;
+}
+
+void yyerror(const char* s) {
+    fprintf(stderr, "Error: %s\n", s);
+}
+```
+
+In the example above, the grammar defines rules for a simple C-like language, including variable declarations and type specifiers.
 
 ## Syntax Analyser
 
-### Our chosen subset of the C language has the following characteristics:
+### Subset Characteristics:
 
-- There can be multiple functions. No two functions will have the same name. A function needs to be defined or declared before it is called. Also, a function and a global variable cannot have the same symbol.
-- There will be no pre-processing directives like `#include` or `#define`.
-- Variables can be declared at suitable places inside a function. Variables can also be declared in the global scope.
-- Precedence and associativity rules are as per standard. Although we will ignore consecutive logical operators or consecutive relational operators like `a && b && c`, `a < b < c`.
-- No `break` statement and `switch-case` statement will be used.
-- `println(int n)` is used instead of `printf(“%d\n”, n)` to simplify the analysis.
+- Multiple functions with unique names, declared or defined before being called.
+- No pre-processing directives like `#include` or `#define`.
+- Variables can be declared inside functions or globally.
+- Standard precedence and associativity rules apply, excluding consecutive logical or relational operators.
+- No `break` or `switch-case` statements.
+- `println(int n)` is used instead of `printf(“%d\n”, n)`.
 
-### Error recovery:
-
-Some common syntax errors are handled and recovered so that the parser does not stop parsing immediately after recognizing an error.
-
-<p align="right"><a href="#top">back to top</a></p>
 
 ## Semantic Analyser
 
-### Following semantics are checked in the compiler:
+### Semantic Checks:
 
 <div>
 <details>
-<summary>
-        Type Checking 
-</summary>
+<summary>Type Checking</summary>
 <ol>
-<li>
-        Generates error message if operands of an assignment operator are not consistent with each other. The second operand of the assignment operator will be an expression that may contain numbers, variables, function calls, etc.
-</li>
-<li> 
-        Generates an error message if the index of an array is not an integer.
-</li>
-<li> 
-        Both the operands of the modulus operator should be integers.
-</li>
-        During a function call all the arguments should be consistent with the function definition.
-<li>
-        A void function cannot be called as a part of an expression.
-</li>
+<li>Verifies assignment operand compatibility.</li>
+<li>Ensures array indices are integers.</li>
+<li>Requires integer operands for the modulus operator.</li>
+<li>Validates function call arguments against definitions.</li>
+<li>Prohibits void functions in expressions.</li>
 </ol>
 </details>
 <details>
-<summary>
-        Type Conversion 
-</summary>
-        Conversion from float to integer in any expression generates an error. Also, the result of RELOP and LOGICOP operations are integers.
+<summary>Type Conversion</summary>
+<p>Errors on float-to-integer conversions in expressions. Logical and relational operations result in integers.</p>
 </details>
 <details>
-<summary>
-        Uniqueness Checking
-</summary>
-        Checks whether a variable used in an expression is declared or not. Also, checks whether there are multiple declarations of variables with the same ID in the same scope.
+<summary>Uniqueness Checking</summary>
+<p>Ensures variables are declared and unique within their scope.</p>
 </details>
 <details>
-<summary>
-        Array Index
-</summary>
-        Checks whether there is an index used with array and vice versa.
+<summary>Array Index</summary>
+<p>Checks for correct usage of array indices.</p>
 </details>
 <details>
-<summary>
-        Function Parameters
-</summary>
-        Check whether a function is called with appropriate number of parameters with appropriate types. Function definitions should also be consistent with declaration if there is any. Besides that, a function call cannot be made with non-function type identifier.
+<summary>Function Parameters</summary>
+<p>Validates the number and types of function call arguments, ensuring consistency with declarations.</p>
 </details>
 
-### Non terminal data types used:
+### Non-Terminal Data Types:
 
-Used to check the consistency of different terms and expressions with variable types.
-
-- Trivial data types:
-
-        CONST_INT
-        CONST_FLOAT
-        CONST_CHAR
-        CONST_INT*
-        CONST_FLOAT*
-        CONST_CHAR*
-
-- Other data types:
-        UNDEC (If an ID is found which has never been declared)
-        ERROR (If an expression contains error/s)
-        FUNC_VOID (If the return type of a function is void. This is only used in function calls to check if a void function is used in an expression or not)
-        VARIABLE (Any other type of non terminals.)
+- **Basic Types:** `CONST_INT`, `CONST_FLOAT`, `CONST_CHAR`, `CONST_INT*`, `CONST_FLOAT*`, `CONST_CHAR*`
+- **Special Types:** `UNDEC` (undeclared IDs), `ERROR` (expressions with errors), `FUNC_VOID` (void function return types), `VARIABLE` (other types)
 
 <p align="right"><a href="#top">back to top</a></p>
-        
-## Intermediate Code Generation
 
-After the syntax analyser and the semantic analyser confirm that the source program is correct, the compiler generates the intermediate code. Ideally, a three-address code is generated in real-life compilers. But we have used `8086 Assembly Language` as our intermediate code so that we can run it in `emu 8086` and justify that our compilation is correct.
+### Part 4: Error Recovery
 
-### On the fly intermediate code generation strategy:
+#### Overview
 
-#### Table of Contents:
+Error recovery techniques allow the parser to continue processing after encountering an error, providing meaningful error messages and preventing abrupt termination. Bison provides mechanisms for handling syntax errors gracefully.
 
-- [The Algorithm](#the-algorithm)
-- [Evaluating for loop](#evaluating-for-loop-is-somewhat-tricky)
-- [Evaluating functions](#evaluating-functions)
-- [Declaring variables](#declaring-variables)
-- [Accessing variables](#accessing-variables)
-- [Conclusion](#conclusion)
-- [Optimization](#optimizing-assembly-code)
+#### Example
+
+```bison
+%{
+#include "symbol_table.h"
+void yyerror(const char* s);
+%}
+
+%token <symbol_info> ID ADDOP
+
+%type <symbol_info> expression term factor
+
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
+
+%%
+
+statement : IF '(' expression ')' statement %prec LOWER_THAN_ELSE
+          | IF '(' expression ')' statement ELSE statement
+          ;
+
+declaration_list : declaration_list ',' ID
+                 | declaration_list error ',' ID
+                 {
+                     yyclearin;
+                     yyerrok;
+                 }
+                 | ID
+                 ;
+
+%%
+
+void yyerror(const char* s) {
+    fprintf(stderr, "Error: %s\n", s);
+}
+```
+
+In the example above, the parser handles syntax errors in `declaration_list` by using the `error` token and clearing the lookahead token to continue parsing.
+
+### Part 5: Intermediate Code Generation
+
+#### Overview
+
+Intermediate code generation translates the source code into an intermediate representation, which is then translated to machine code. In this project, we use 8086 assembly language as the intermediate representation.
 
 #### The Algorithm:
 
-We have generated the intermediate code on the fly. Which means that, instead of using any data structure and passing the whole code one after another to the production rules of the grammar, we have generated the intermediate code as soon as we match a rule and write it in the `code.asm` file. To do that, we have to use the `PUSH` and `POP` instructions in the assembly code which utilize the stack.
+Intermediate code is generated on-the-fly by writing to `code.asm` as soon as a rule is matched. This involves using `PUSH` and `POP` instructions for stack operations.
 
-- Let's understand the algorithm with an example.
-  Let's say we have a grammar like this:
+##### Example:
 
-          E -> E + T
-          E -> T
-          T -> T * F
-          T -> F
-          F -> id
-          F -> digit
-
-- While bison evaluates any string like `a + 2 * c` the lexer will first read the string and generate the tokens like `
-
-id, +, digit, *, id`. So the order of the matched rules will be as follows:
-
-        a found : F -> id reduced
-        + found : nothing reduced (no rules matched yet)
-        2 found : F -> digit reduced
-        * found : nothing reduced (no rules matched yet)
-        c found : F -> id reduced
-
-- At first only the production rules of `F` matched. So, we are going to push the `id` and `digit` to the stack of 8086.
-
-```asm
-        PUSH a
-        PUSH 2
-        PUSH c
-```
-
-The stack will look like this now:
-
-        SP -> c
-              2
-              a
-
-        * here SP points to the top of the stack
-
-- Now that all the lexemes are matched, the parser will match the production rules of `E` and `T` as follows:
-
-- As '2' and 'a' reduced to 'F' previously,
-  now, for the F of '2', ` T -> F` is reduced. Now, it's finally the time to match the rule corresponding to '\*'
-
-          2 * c found : T -> T * F reduced
-
-- As this rule has been matched, we are going to `pop` the ID c and digit 2 from the stack, evaluate the multiplication operation and push the result to the stack.
-
-```asm
-        POP BX          ;this will pop c from the stack
-        POP AX          ;this will pop 2 from the stack
-        MUL BX          ;this will multiply 2 with c and store the result in AX
-        PUSH AX         ;this will push the result of 2 * c to the stack
-```
-
-- Now the stack will look like this:
-
-        SP -> 2*c
-              a
-
-- Similarly `E -> E + T` will now be reduced. So, we can pop the last two values from the stack and simply add them.
-
-```asm
-        POP BX          ;this will pop 2*c from the stack
-        POP AX          ;this will pop a from the stack
-        ADD AX, BX      ;this will add a and 2*c and store the result in AX
-        PUSH AX         ;this will push the result of a+2*c  to the stack
-```
-
-- `Note 1`: After the whole expression is evaluated, the value of the expression is already pushed in the stack. So, we can use it in our next expression if needed or we can just pop it. For example, if we had `d = a + 2 * c`, we could use the value of `a + 2 * c` in `d` by popping it out. The stack will look like this:
-
-        SP -> a + 2*c
-              d
-
-        * here 'd' was pushed because it matched F -> id first. But this value of 'd' is useless. So, we can pop it out.
-
-- Here is the required asm code to evaluate the expression
-
-```asm
-        POP BX          ;this will pop a+2*c from the stack
-        POP AX          ;this will pop the (useless) value of d from the stack
-        MOV d, BX       ;this will store the value of a+2*c in d
-        PUSH d         ;this will push the value of d to the stack
-```
-
-- The stack will look like this now:
-
-        SP -> d
-
-- `Note2`: With the above algorithm, we can evaluate any expression. But the catch is that, there is always an extra `PUSH` at the end of every expression. So, when we don't need that value, we can just pop it out. i.e; when we get a SEMICOLON `;` after the expression above, that will mean that the expression is over. For the example above, if it ends with a semicolon then we don't need the value of d anymore. So, we can pop it out like this:
-
-```asm
-        POP BX          ;this will pop d from the stack
-```
-
-- The stack is empty again.
-- So the complete code for evaluating `d = a + 2 * c;` looks like this:
-
-```asm
-        PUSH d
-        PUSH a
-        PUSH 2
-        PUSH c
-
-        POP BX          ;this will pop c from the stack
-        POP AX          ;this will pop 2 from the stack
-        MUL BX          ;this will multiply 2 with c and store the result in AX
-        PUSH AX         ;this will push the result of 2 * c to the stack
-
-        POP BX          ;this will pop 2*c from the stack
-        POP AX          ;this will pop a from the stack
-        ADD AX, BX      ;this will add a and 2*c and store the result in AX
-        PUSH AX         ;this will push the result of a+2*c  to the stack
-
-        POP BX          ;this will pop a+2*c from the stack
-        POP AX          ;this will pop the (useless) value of d from the stack
-        MOV d, BX       ;this will store the value of a+2*c in d
-        PUSH d         ;this will push the value of d to the stack
-
-        POP BX          ;this will pop d (useless) from the stack. This was pushed at the start of the expression.
-```
-
-- If there was no semicolon in the expression, then we would not pop out the last value of d. This helps in passing parameters to functions or evaluating if statements.
-
-<p align="right"><a href="#top">back to top</a></p>
-
-#### Evaluating `for` loop is somewhat tricky:
-
-- Though the above algorithm works for every expression used in the code, it requires a small trick to evaluate for loops. A for loop's grammar looks like this:
+Consider the grammar:
 
 ```bison
-expression -> FOR LPAREN expression_statement expression_statement expression RPAREN LCURL statements RCURL
-expression_statement -> expression SEMICOLON
+E -> E + T
+E -> T
+T -> T * F
+T -> F
+F -> id
+F -> digit
 ```
 
-- The problem in evaluating `for` loops is that we need to evaluate the third expression after the statements in the curly braces are executed. Here, we have done this by saving the line number of the starting of third expression and then inserting the codes corresponding the statements from that line. The following pseudo code might help:
-
-```pseudo
-expression -> FOR LPAREN expression_statement expression_statement
-        {
-                isInForLoop = true;
-                lineNo = currentLineNo; // Saves the line number before third expression
-        }
-        expression RPAREN LCURL statements RCURL
-
-statements -> ... {
-                if(isInForLoop) {
-                        insertCode(lineNo);
-                } else {
-                        insertCode(currentLineNo);
-                }
-        }
-
-/* You might need to write a function to insert text in the middle of a file. */
-```
-
-#### Evaluating `functions`:
-
-- Please read pages 303-305 (14.5.3 Using the stack for procedures) of the book [Assembly Language Programming and Organization of the IBM PC by Ytha Yu, Charles Marut](https://drive.google.com/file/d/1Gt-PvcimLN0oiuXbkhZ6KVM2X6POcqcM/view?usp=sharing)
-
-<p align="right"><a href="#top">back to top</a></p>
-
-#### Declaring variables:
-
-- **Global variables**: We have inserted the global variables in the data segment. This is done by saving the end line number of the data segment in a variable and then inserting the code corresponding to the global variables using the `writeAt(filename, lineNo)` function of `fileUtils.h` header.
-
-- **Global arrays**: We have done this the same way as we have done for global variables. But the syntax is a little different. Follow the example below.
-
-- **Local variables**: Whenever a local variable is declared inside a function, we have PUSHed a dummy value to the stack. Then we just saved the offset of that stack address with respect to BP (bottom pointer referenced in the book [here](#evaluating-functions)) in the `IdInfo` of that id.
-
-- **Local Arrays**: Here we have followed the same technique as local variables but the stack is pushed "size of the array" times. Offset of the first element along with the size of the array is saved in the `IdInfo` of the array id.
-        
-    - `Note`: A better approach is to subtract the byte size of the array from SP. It will just move the SP at the end of the array.
-- **Example**:
-
-```c
-        int a, b[3];
-        int main() {
-            int c, d[3], e;
-        }
-```
+For the expression `a + 2 * c`, the lexer generates tokens `id, +, digit, *, id`. The parser then matches rules and generates code as follows:
 
 ```asm
-        ...
-        .DATA
-            a DW ?
-            b DW 3 DUP(?)
-        .CODE
-        main PROC
-            PUSH AX         ;A garbage value pushed for c
-                            ;Offset is -2
-            ;PUSH AX
-            ;PUSH AX
-            ;PUSH AX        ;3 garbage values pushed for d[3]
-                            ;offset is -4
-            ;better way of allocating space for an array
-            SUB SP, 6       ;SP is moved to the end of d[3]
-
-            PUSH AX         ;A garbage value pushed for e
-                            ;offset is -10
-        main ENDP
-        END MAIN
+PUSH a
+PUSH 2
+PUSH c
+POP BX
+POP AX
+MUL BX
+PUSH AX
+POP BX
+POP AX
+ADD AX, BX
+PUSH AX
+POP BX
+POP AX
+MOV d, BX
+PUSH d
+POP BX
 ```
 
-#### Accessing variables:
+##### Evaluating `for` Loop:
 
-- **Global variables**: We just check if it's a global variable or not. If yes then we just used the name of the variable.
+Special handling is required for evaluating `for` loops, saving the line number of the third expression and inserting corresponding code.
 
-- **Global arrays**: We have to use the name of the array and the index of the array. See the example below.
+##### Evaluating Functions:
 
-- **Local variables**: We have to use
+Refer to pages 303-305 (14.5.3 Using the stack for procedures) of "Assembly Language Programming and Organization of the IBM PC" by Ytha Yu, Charles Marut.
 
- the offset of the stack address with respect to BP.
+##### Declaring Variables:
 
-- **Local Arrays**: We have to use the offset of the stack address with respect to BP and then add the array index times 2 with it.
+Variables are declared by pushing dummy values to the stack or adding entries to the data segment.
 
-- **Example**: Continued from the previous example.
+##### Accessing Variables:
+
+Variables are accessed by checking their scope and using appropriate addressing modes.
+
+##### Example:
 
 ```asm
-        a               ;global variable a is accessed
-        b[0]            ;global array b at index 0 is accessed
-        b[2]            ;global array b at index 1 is accessed
-
-        [BP + -2]       ;local variable c is accessed
-        [BP + -4]       ;local array d at index 0 is accessed
-        [BP + -8]       ;local array d at index 2 is accessed
-        [BP + -10]      ;local variable e is accessed
+a               ;global variable
+b[0]            ;global array
+[BP + -2]       ;local variable
+[BP + -4]       ;local array index 0
 ```
 
-#### Conclusion
+### Optimizing Assembly Code
 
-- It requires a lot of push and pop instructions in this approach. So, sometimes the same value is pushed and popped consecutively. For that reason, an optimization is required. This is called peephole optimization. We have done it in the second pass (after all the expressions are evaluated).
+#### Optimizations:
 
-<p align="right"><a href="#top">back to top</a></p>
+- **Remove Redundant Instructions:** Eliminate unnecessary `PUSH` and `POP` instructions.
+- **Optimize `MOV` Instructions:** Remove redundant moves.
+- **Simplify Jumps and Comparisons:** Remove unnecessary jump and compare instructions.
 
-### Optimizing assembly code
 
-As the above algorithm can generate some redundant instructions, we have to optimize the code. The following optimizations are done:
 
-* **Remove redundant push and pop instructions.**
-    * If the first instruction is push and the second is pop and those contains the same address or register then we can remove both the instructions. For example:
-        ```asm
-                *code.asm                               *optimized_code.asm
-                PUSH AX                 ->              ;PUSH AX
-                POP AX                                  ;POP AX
-        ```
-    * If the first is push and the second is a pop containing a register or an address then we can replace the two instructions with one MOV instruction. For example:
-        ```asm
-                *code.asm                               *optimized_code.asm
-                PUSH [BP + -2]          ->              MOV AX, [BP + -2]
-                POP AX
-        ```
-* **Remove redundant move instructions**
-    * If a move instruction has the same source and destination then we can remove the instruction. For example:
-        ```asm
-                *code.asm                               *optimized_code.asm
-                MOV AX, AX              ->              ;MOV AX, AX
-        ```
-    * If consecutive two instructions are move and the first instruction contains the same register or address as the second instruction then we can remove the first instruction. For example:
-        ```asm
-                *code.asm                              *optimized_code.asm
-                MOV AX, BX              ->             ;MOV AX, BX
-                MOV AX, CX                             MOV AX, CX
-        ```
-    * If consecutive two instructions are move and the source of the first instruction is the destination of the second instruction and the source of the second one is the destination of the first then we can remove the second instruction. For example:
-        ```asm
-                *code.asm                              *optimized_code.asm
-                MOV AX, BX              ->             MOV AX, BX
-                MOV BX, AX                             ;MOV BX, AX
-        ```
-* **Remove jump instructions followed by a label that is used by that jump**
-    ```asm
-                *code.asm                              *optimized_code.asm
-                CMP AX, BX              ->              CMP AX, BX
-                JE L1                                   ;JE L1
-                L1:                                     L1:
-    ```
-* **Remove compare instructions that are not followed by any jump instruction**
-    * It is not likely to occur in the first pass of optimization. But it might occur in the next passes if the jump instructions that followed the compare instructions were removed in a previous pass. For example, in the first pass:
-        ```asm
-                *code.asm                              *optimized_code.asm
-                CMP AX, BX              ->              CMP AX, BX
-                JE L1                                   ;JE L1
-                L1:                                     L1:
-        ```
-    * Now, the compare instruction is useless:
-        ```asm
-                *code.asm                              *optimized_code.asm
-                CMP AX, BX              ->              ;CMP AX, BX
-                ;JE L1                                  ;JE L1
-                L1:                                     L1:
-        ```
-
-<p align="right"><a href="#top">back to top</a></p>
 
 ## Disclaimer
 
-*The repository serves as an archive for the author's solutions to the course assignments. The solutions are **not guaranteed to be foolproof**. The author is not responsible for **any damage** caused by the use of the solutions. While it can serve as a **reference**, it is strongly discouraged to copy the solutions for **academic dishonesty**, and the author is not responsible for any consequences of such actions.*
+*The repository serves as an archive for the author's solutions to the course assignments. The solutions are **not guaranteed to be full-proof**. The author is not responsible for **any damage** caused by the use of the solutions. While it can serve as a **reference**, it is strongly discouraged to copy the solutions for **academic dishonesty**, and the author is not responsible for any consequences of such actions.*
 
 ## Contributing
 
