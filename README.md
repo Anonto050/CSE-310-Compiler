@@ -21,6 +21,7 @@ This repository contains the implementation of assignments from the Compiler Ses
   - [Part 3: Syntax and Semantic Analysis](#part-3-syntax-and-semantic-analysis)
   - [Part 4: Error Recovery](#part-4-error-recovery)
   - [Part 5: Intermediate Code Generation](#part-5-intermediate-code-generation)
+- [Backpatching](#backpatching)
 - [Disclaimer](#disclaimer)
 - [Contributing](#contributing)
 - [License](#license)
@@ -58,26 +59,26 @@ To get started with this repository:
 ### Offline 1: Symbol Table
 
 **Symbol Table**
-- [Problem Specification](Offline/Offline%201/Assignment1_Specification.pdf)
-- [Solution](Offline/Offline%201/1705010)
+- [Problem Specification](/Symbol%20Table/CSE310_Assignment1_Specification.pdf)
+- [Solution](/Symbol%20Table/1905050_symbolTable.cpp)
 
 ### Offline 2: Lexical Analysis (FLEX)
 
 **Lexical Analysis**
-- [Problem Specification](Offline/Offline%202/Assignment%202%20Specification.pdf)
-- [Solution](Offline/Offline%202/1705010)
+- [Problem Specification](/lexical%20analyzer/CSE310_July2022_Offline2_LexicalAnalysis_Specifications.pdf)
+- [Solution](/lexical%20analyzer)
 
 ### Offline 3: Syntax & Semantic Analysis (YACC/BISON)
 
 **Syntax & Semantic Analysis**
-- [Problem Specification](Offline/Offline%203/CSE310_January_2021_YACC_Assignment_Spec.pdf)
-- [Solution](Offline/Offline%203/1705010)
+- [Problem Specification](/parser%20generator/Resource/CSE310_July_2022_YACC_Assignment_Spec.pdf)
+- [Solution](/parser%20generator)
 
 ### Offline 4: Intermediate Code Generation
 
 **Intermediate Code Generation**
-- [Problem Specification](Offline/Offline%204/CSE_310_January_2021_ICG_Spec.pdf)
-- [Solution](Offline/Offline%204/1705010)
+- [Problem Specification](/Intermediate%20Code%20Generation/CSE_310_July_2022_ICG_Spec.docx)
+- [Solution](/Intermediate%20Code%20Generation/Main)
 
 ## Making it Easier: C Compiler
 
@@ -401,6 +402,9 @@ void yyerror(const char* s) {
 
 In the example above, the parser handles syntax errors in `declaration_list` by using the `error` token and clearing the lookahead token to continue parsing.
 
+<p align="right"><a href="#top">back to top</a></p>
+
+
 ### Part 5: Intermediate Code Generation
 
 #### Overview
@@ -478,7 +482,11 @@ b[0]            ;global array
 - **Optimize `MOV` Instructions:** Remove redundant moves.
 - **Simplify Jumps and Comparisons:** Remove unnecessary jump and compare instructions.
 
+<p align="right"><a href="#top">back to top</a></p>
 
+## Backpatching
+
+If you want to apply Backpatching in your ICG code, you need to understand how that works. For detailed explanation, see [here](/Backpatching)
 
 
 ## Disclaimer
